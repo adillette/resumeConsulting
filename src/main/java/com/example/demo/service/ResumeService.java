@@ -7,6 +7,7 @@ import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.demo.advisor.ResumeAdvisor;
 import com.example.demo.dao.ResumeDao;
 import com.example.demo.dto.Resume;
 
@@ -19,44 +20,44 @@ public class ResumeService {
   private ChatClient chatClient;
 
   public ResumeService(ChatClient.Builder chatClientBuilder) {
-    this.chatClient = chatClientBuilder.build();
+    this.chatClient = chatClientBuilder
+        .defaultAdvisors(new ResumeAdvisor(0))
+        .build();
   }
 
   @Autowired
   private ResumeDao resumeDao;
 
-  @Autowired
-  private EmbeddingModel embeddingModel;// text-embedding-3-small
+  // @Autowired
+  // private EmbeddingModel embeddingModel;// text-embedding-3-small
 
-  @Autowired
-  private VectorStore vectorStore;
-
-  // public String generateResumeCoach(String question) {
-  //   String answer = chatClient.prompt()
+  // @Autowired
+  // private VectorStore vectorStore;
+ 
+  // public Flux<String> generateStreamResumeCoach(String question) {
+  //   Flux<String> fluxstring = chatClient.prompt()
   //       .system("입력한 양식에 맞추어서 한국어로 답변해야합니다.")
   //       .user(question)
   //       .options(ChatOptions.builder()
   //           .model("gpt-4o-mini")
   //           .maxTokens(300)
   //           .temperature(0.4).build())
-  //       .call()
+  //       .stream()
   //       .content();
 
-  //   return answer;
+  //   return fluxstring;
   // }
 
-  public Flux<String> generateStreamResumeCoach(String question) {
-    Flux<String> fluxstring = chatClient.prompt()
-        .system("입력한 양식에 맞추어서 한국어로 답변해야합니다.")
-        .user(question)
-        .options(ChatOptions.builder()
-            .model("gpt-4o-mini")
-            .maxTokens(300)
-            .temperature(0.4).build())
-        .stream()
-        .content();
+//--------------------------------------------------
 
-    return fluxstring;
+
+
+  public String advivisorChain(String question) {
+    String answer = chatClient.prompt()
+        .user(question)
+        .call()
+        .content();
+    return answer;
   }
 
   // ---------------------------------------------------

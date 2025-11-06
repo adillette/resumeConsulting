@@ -1,0 +1,178 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.ResumeDao">
+    
+    <!-- INSERT: 이력서 등록 -->
+    <insert id="insertResume" parameterType="Resume"
+            useGeneratedKeys="true" keyProperty="resumeId">
+        INSERT INTO resumes (
+            user_id,
+            title,
+            file_url,
+            education,
+            experience,
+            projects,
+            certifications,
+            awards,
+            summary,
+            skills,
+            languages
+        ) VALUES (
+            #{userId},
+            #{title},
+            #{fileUrl},
+            #{education}::jsonb,
+            #{experience}::jsonb,
+            #{projects}::jsonb,
+            #{certifications}::jsonb,
+            #{awards}::jsonb,
+            #{summary},
+            #{skills}::jsonb,
+            #{languages}::jsonb
+        )
+    </insert>
+    
+    <!-- SELECT: 이력서 조회 (단건) -->
+    <select id="selectResumeById" parameterType="int" resultType="Resume">
+        SELECT 
+            resume_id AS resumeId,
+            user_id AS userId,
+            title,
+            file_url AS fileUrl,
+            education,
+            experience,
+            projects,
+            certifications,
+            awards,
+            summary,
+            skills,
+            languages,
+            created_at AS createdAt,
+            updated_at AS updatedAt
+        FROM resumes
+        WHERE resume_id = #{resumeId}
+    </select>
+    
+    <!-- SELECT: 사용자별 이력서 목록 조회 -->
+    <select id="selectResumesByUserId" parameterType="int" resultType="Resume">
+        SELECT 
+            resume_id AS resumeId,
+            user_id AS userId,
+            title,
+            file_url AS fileUrl,
+            education,
+            experience,
+            projects,
+            certifications,
+            awards,
+            summary,
+            skills,
+            languages,
+            created_at AS createdAt,
+            updated_at AS updatedAt
+        FROM resumes
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- SELECT: 전체 이력서 목록 조회 (최근순) -->
+    <select id="selectAllResumes" resultType="Resume">
+        SELECT 
+            resume_id AS resumeId,
+            user_id AS userId,
+            title,
+            file_url AS fileUrl,
+            education,
+            experience,
+            projects,
+            certifications,
+            awards,
+            summary,
+            skills,
+            languages,
+            created_at AS createdAt,
+            updated_at AS updatedAt
+        FROM resumes
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- UPDATE: 이력서 수정 -->
+    <update id="updateResume" parameterType="Resume">
+        UPDATE resumes SET
+            title = #{title},
+            file_url = #{fileUrl},
+            education = #{education}::jsonb,
+            experience = #{experience}::jsonb,
+            projects = #{projects}::jsonb,
+            certifications = #{certifications}::jsonb,
+            awards = #{awards}::jsonb,
+            summary = #{summary},
+            skills = #{skills}::jsonb,
+            languages = #{languages}::jsonb,
+            updated_at = CURRENT_TIMESTAMP
+        WHERE resume_id = #{resumeId}
+    </update>
+    
+    <!-- DELETE: 이력서 삭제 -->
+    <delete id="deleteResume" parameterType="int">
+        DELETE FROM resumes
+        WHERE resume_id = #{resumeId}
+    </delete>
+    
+    <!-- SELECT: 특정 기술을 보유한 이력서 검색 (JSONB 연산자 사용) -->
+    <select id="selectResumesBySkill" parameterType="String" resultType="Resume">
+        SELECT 
+            resume_id AS resumeId,
+            user_id AS userId,
+            title,
+            file_url AS fileUrl,
+            education,
+            experience,
+            projects,
+            certifications,
+            awards,
+            summary,
+            skills,
+            languages,
+            created_at AS createdAt,
+            updated_at AS updatedAt
+        FROM resumes
+        WHERE skills ?? #{skill}
+        <!-- ?? 연산자: JSONB 배열에 특정 값이 포함되어 있는지 확인 -->
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- SELECT: 제목으로 이력서 검색 -->
+    <select id="selectResumesByTitle" parameterType="String" resultType="Resume">
+        SELECT 
+            resume_id AS resumeId,
+            user_id AS userId,
+            title,
+            file_url AS fileUrl,
+            education,
+            experience,
+            projects,
+            certifications,
+            awards,
+            summary,
+            skills,
+            languages,
+            created_at AS createdAt,
+            updated_at AS updatedAt
+        FROM resumes
+        WHERE title ILIKE CONCAT('%', #{title}, '%')
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- SELECT: 이력서 개수 조회 -->
+    <select id="countResumes" parameterType="Integer" resultType="int">
+        SELECT COUNT(*)
+        FROM resumes
+        <if test="userId != null">
+            WHERE user_id = #{userId}
+        </if>
+    </select>
+
+</mapper>

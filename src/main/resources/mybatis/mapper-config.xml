@@ -10,7 +10,7 @@
   
   <typeAliases>
     <typeAlias type="com.example.demo.dto.Resume" alias="Resume"/>
-    <typeAlias type="com.example.demo.dto.ResumeFeedBack" alias="ResumeFeedBack"/>
+    <typeAlias type="com.example.demo.dto.ResumeFeedback" alias="ResumeFeedback"/>
     
   </typeAliases>
 

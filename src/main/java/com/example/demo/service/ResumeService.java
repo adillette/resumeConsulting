@@ -17,6 +17,9 @@ import reactor.core.publisher.Flux;
 @Service
 @Slf4j
 public class ResumeService {
+  @Autowired
+  private ResumeDao resumeDao;
+  
   private ChatClient chatClient;
 
   public ResumeService(ChatClient.Builder chatClientBuilder) {
@@ -25,8 +28,6 @@ public class ResumeService {
         .build();
   }
 
-  @Autowired
-  private ResumeDao resumeDao;
 
   // @Autowired
   // private EmbeddingModel embeddingModel;// text-embedding-3-small

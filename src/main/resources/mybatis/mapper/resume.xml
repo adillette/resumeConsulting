@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "https://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.dao.mybatis.MemberDao">
+  <insert id="insertResume" parameterType="com.example.demo.dto.Resume"
+  useGeneratedKeys="true">
+    insert into resumes(
+      user_id, resume_title, file_url,
+      education, experience, projects,
+      certifications, awards, links,
+      summary, skills, languages
+    ) values(
+      #{userId}, #{resumeTitle}, #{fileUrl},
+      #{education}, #{experience}, #{projects},
+      #{certifications}, #{awards}, #{links},
+      #{summary}, #{skills}, #{languages}
+    )
+  </insert>
+
+
+  <select id="selectResumeById" parameterType="int"
+    resultType="com.example.yourproject.dto.Resume">
+
+    select 
+      resume_id,
+      user_id AS userId,
+       resume_title AS resumeTitle,
+        file_url AS fileUrl,
+         education,
+            experience,
+            projects,
+            certifications,
+            awards,
+            links,
+            summary,
+            skills,
+            languages,
+            
+            created_at AS createdAt,
+            //** created_at → createdAt
+            
+            updated_at AS updatedAt
+            //** updated_at → updatedAt
+    from resumes
+
+   WHERE resume_id = #{resume_id}
+  </select>
+
+
+      <!-- SELECT: 사용자별 이력서 목록 -->
+    <select id="selectResumesByUserId" parameterType="int" 
+            resultType="com.example.yourproject.dto.Resume">
+        SELECT 
+            resume_id,
+            user_id AS userId,
+            resume_title AS resumeTitle,
+            file_url AS fileUrl,
+            education,
+            experience,
+            projects,
+            certifications,
+            awards,
+            links,
+            summary,
+            skills,
+            languages,
+            created_at AS createdAt,
+            updated_at AS updatedAt
+        FROM resumes
+        WHERE user_id = #{userId}
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- SELECT: 전체 이력서 목록 -->
+    <select id="selectAllResumes" resultType="com.example.yourproject.dto.Resume">
+        SELECT 
+            resume_id,
+            user_id AS userId,
+            resume_title AS resumeTitle,
+            file_url AS fileUrl,
+            education,
+            experience,
+            projects,
+            certifications,
+            awards,
+            links,
+            summary,
+            skills,
+            languages,
+            created_at AS createdAt,
+            updated_at AS updatedAt
+        FROM resumes
+        ORDER BY created_at DESC
+    </select>
+    
+    <!-- UPDATE: 이력서 수정 -->
+    <update id="updateResume" parameterType="com.example.yourproject.dto.Resume">
+        UPDATE resumes SET
+            resume_title = #{resumeTitle},
+            file_url = #{fileUrl},
+            education = #{education},
+            experience = #{experience},
+            projects = #{projects},
+            certifications = #{certifications},
+            awards = #{awards},
+            links = #{links},
+            summary = #{summary},
+            skills = #{skills},
+            languages = #{languages},
+            updated_at = CURRENT_TIMESTAMP
+        WHERE resume_id = #{resume_id}
+    </update>
+    
+    <!-- DELETE: 이력서 삭제 -->
+    <delete id="deleteResume" parameterType="int">
+        DELETE FROM resumes
+        WHERE resume_id = #{resume_id}
+    </delete>
+
+
+
+</mapper>
+  

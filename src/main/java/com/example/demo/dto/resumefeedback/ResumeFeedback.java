@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.resumefeedback;
 
 import java.math.BigDecimal;
 import java.sql.Timestamp;
@@ -18,7 +18,7 @@ public class ResumeFeedback{
     private int userId;          // user_id (FK)
     
     // 점수 관련
-    private BigDecimal totalScore;  // total_score (0.0 ~ 10.0)
+    private Double totalScore;   // total_score (0.0 ~ 10.0)
     private String scores;          // scores JSONB (항목별 점수)
     
     // 강점/약점/개선점 (JSONB 필드들)

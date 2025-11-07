@@ -9,8 +9,10 @@ import org.springframework.stereotype.Service;
 
 import com.example.demo.advisor.ResumeAdvisor;
 import com.example.demo.dao.ResumeDao;
-import com.example.demo.dto.Resume;
-import com.example.demo.dto.ResumeRequest;
+import com.example.demo.dto.resume.Resume;
+import com.example.demo.dto.resume.ResumeRequest;
+import com.example.demo.dto.resumefeedback.ResumeFeedback;
+import com.example.demo.dto.resumefeedback.ResumeFeedbackResponse;
 
 import lombok.extern.slf4j.Slf4j;
 // import reactor.core.publisher.Flux;
@@ -50,36 +52,74 @@ public class ResumeService {
   //   return fluxstring;
   // }
 
-//--------------------------------------------------
 
-  public String advivisorChain(ResumeRequest request) {
-    
-    String question = request.getQuestion();
-    
-    String answer = chatClient.prompt()
-        .user(question)
-        .call()
-        .content();
-    return answer;
+
+
+  public ResumeFeedback saveResumeFeedback(int resumeId, int userId, ResumeFeedbackResponse feedbackResult){
+    ResumeFeedback feedback = new ResumeFeedback();
+
+    feedback.setTotalScore(feedbackResult.getTotalScore());
+
+     return feedback;
   }
+
+
+
 
   // ---------------------------------------------------
   // 기본 crud
-  public String insertResume(Resume resume) {
+  public int insertResume(Resume resume) {
     int result = resumeDao.insertResume(resume);
-    if (result != 0) {
-      return "success";
+    if (result <= 0) {
+      return -1;
     }
-    return "fail";
+    log.info("이력서 등록 완료: resumeId={}",resume.getResumeId());
+    int newResumeNumber =  resume.getResumeId();
+      return  newResumeNumber ;
+
+  
 
   }
-
-  public Resume getResume(int resume_id) {
-    Resume resume = resumeDao.selectResumeById(resume_id);
-    return resume;
-  }
+  //조회
+      public Resume getResume(int resumeId) {
+        
+        log.info("이력서 조회: resumeId={}", resumeId);
+        
+        Resume resume = resumeDao.selectResumeById(resumeId);
+        
+        if (resume == null) {
+            log.warn("이력서를 찾을 수 없음: resumeId={}", resumeId);
+        }
+        
+        return resume;
+    }
 
   // update
+
+    public String updatResume(Resume resume){
+      log.info("이력서 수정: resumeId={}",resume.getResumeId());
+      int result = resumeDao.updateResume(resume);
+
+      if (result <= 0) {
+          return "fail";
+      }
+      log.info("이력서 수정완료: resumeId={}",resume.getResumeId());
+      
+      String message = String.format("수정된 이력서 ", resume.getResumeId());
+      return message;
+    }
   // delete
+
+  public int deleteResume(int resumeId){
+    log.info("이력서 삭제: resumeId={}", resumeId);
+
+    int result = resumeDao.delete(resumeId);
+
+    if(result<=0){
+      return -1;
+    }
+    log.info("이력서 삭제 완료: resumeId={}", resumeId);
+    return result;
+  }
 
 }

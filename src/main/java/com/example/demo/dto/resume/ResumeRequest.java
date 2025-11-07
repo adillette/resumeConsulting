@@ -1,4 +1,4 @@
-package com.example.demo.dto;
+package com.example.demo.dto.resume;
 
 import lombok.Data;
 import lombok.Getter;
@@ -7,9 +7,7 @@ import lombok.Setter;
 @Getter
 @Setter
 public class ResumeRequest {
-   ResumeRequest(){
-
-   }
+   ResumeRequest(){}
    private String question;
     @Override
     public String toString() {

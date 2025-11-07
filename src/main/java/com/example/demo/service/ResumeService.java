@@ -1,18 +1,19 @@
 package com.example.demo.service;
 
 import org.springframework.ai.chat.client.ChatClient;
-import org.springframework.ai.chat.prompt.ChatOptions;
-import org.springframework.ai.embedding.EmbeddingModel;
-import org.springframework.ai.vectorstore.VectorStore;
+// import org.springframework.ai.chat.prompt.ChatOptions;
+// import org.springframework.ai.embedding.EmbeddingModel;
+// import org.springframework.ai.vectorstore.VectorStore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.example.demo.advisor.ResumeAdvisor;
 import com.example.demo.dao.ResumeDao;
 import com.example.demo.dto.Resume;
+import com.example.demo.dto.ResumeRequest;
 
 import lombok.extern.slf4j.Slf4j;
-import reactor.core.publisher.Flux;
+// import reactor.core.publisher.Flux;
 
 @Service
 @Slf4j
@@ -51,9 +52,10 @@ public class ResumeService {
 
 //--------------------------------------------------
 
-
-
-  public String advivisorChain(String question) {
+  public String advivisorChain(ResumeRequest request) {
+    
+    String question = request.getQuestion();
+    
     String answer = chatClient.prompt()
         .user(question)
         .call()

@@ -10,6 +10,9 @@ import com.fasterxml.jackson.databind.JavaType;
 import lombok.Data;
 
 
+
+
+
 @Data
 public class Resume {
 

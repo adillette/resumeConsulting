@@ -9,8 +9,8 @@
   </settings>
   
   <typeAliases>
-    <typeAlias type="com.example.demo.dto.Resume" alias="Resume"/>
-    <typeAlias type="com.example.demo.dto.ResumeFeedback" alias="ResumeFeedback"/>
+    <typeAlias type="com.example.demo.dto.resume.Resume" alias="Resume"/>
+    <typeAlias type="com.example.demo.dto.resumefeedback.ResumeFeedback" alias="ResumeFeedback"/>
     
   </typeAliases>
 

@@ -7,7 +7,7 @@
     <!-- INSERT: 이력서 등록 -->
     <insert id="insertResume" parameterType="Resume"
             useGeneratedKeys="true" keyProperty="resumeId">
-        INSERT INTO resumes (
+        INSERT INTO resume (
             user_id,
             title,
             file_url,
@@ -51,12 +51,12 @@
             languages,
             created_at AS createdAt,
             updated_at AS updatedAt
-        FROM resumes
+        FROM resume
         WHERE resume_id = #{resumeId}
     </select>
     
     <!-- SELECT: 사용자별 이력서 목록 조회 -->
-    <select id="selectResumesByUserId" parameterType="int" resultType="Resume">
+    <select id="selectresumeByUserId" parameterType="int" resultType="Resume">
         SELECT 
             resume_id AS resumeId,
             user_id AS userId,
@@ -72,13 +72,13 @@
             languages,
             created_at AS createdAt,
             updated_at AS updatedAt
-        FROM resumes
+        FROM resume
         WHERE user_id = #{userId}
         ORDER BY created_at DESC
     </select>
     
     <!-- SELECT: 전체 이력서 목록 조회 (최근순) -->
-    <select id="selectAllResumes" resultType="Resume">
+    <select id="selectAllresume" resultType="Resume">
         SELECT 
             resume_id AS resumeId,
             user_id AS userId,
@@ -94,13 +94,13 @@
             languages,
             created_at AS createdAt,
             updated_at AS updatedAt
-        FROM resumes
+        FROM resume
         ORDER BY created_at DESC
     </select>
     
     <!-- UPDATE: 이력서 수정 -->
     <update id="updateResume" parameterType="Resume">
-        UPDATE resumes SET
+        UPDATE resume SET
             title = #{title},
             file_url = #{fileUrl},
             education = #{education}::jsonb,
@@ -117,12 +117,12 @@
     
     <!-- DELETE: 이력서 삭제 -->
     <delete id="deleteResume" parameterType="int">
-        DELETE FROM resumes
+        DELETE FROM resume
         WHERE resume_id = #{resumeId}
     </delete>
     
     <!-- SELECT: 특정 기술을 보유한 이력서 검색 (JSONB 연산자 사용) -->
-    <select id="selectResumesBySkill" parameterType="String" resultType="Resume">
+    <select id="selectresumeBySkill" parameterType="String" resultType="Resume">
         SELECT 
             resume_id AS resumeId,
             user_id AS userId,
@@ -138,14 +138,14 @@
             languages,
             created_at AS createdAt,
             updated_at AS updatedAt
-        FROM resumes
+        FROM resume
         WHERE skills ?? #{skill}
         <!-- ?? 연산자: JSONB 배열에 특정 값이 포함되어 있는지 확인 -->
         ORDER BY created_at DESC
     </select>
     
     <!-- SELECT: 제목으로 이력서 검색 -->
-    <select id="selectResumesByTitle" parameterType="String" resultType="Resume">
+    <select id="selectresumeByTitle" parameterType="String" resultType="Resume">
         SELECT 
             resume_id AS resumeId,
             user_id AS userId,
@@ -161,15 +161,15 @@
             languages,
             created_at AS createdAt,
             updated_at AS updatedAt
-        FROM resumes
+        FROM resume
         WHERE title ILIKE CONCAT('%', #{title}, '%')
         ORDER BY created_at DESC
     </select>
     
     <!-- SELECT: 이력서 개수 조회 -->
-    <select id="countResumes" parameterType="Integer" resultType="int">
+    <select id="countresume" parameterType="Integer" resultType="int">
         SELECT COUNT(*)
-        FROM resumes
+        FROM resume
         <if test="userId != null">
             WHERE user_id = #{userId}
         </if>
